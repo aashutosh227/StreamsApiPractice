@@ -13,10 +13,10 @@ public class GCD {
 
         int min = Math.min(a,b);
 
-        int rs = IntStream.range(1,min+1)
+        int rs = -IntStream.range(-min,0)
                 .filter(f->(a%f==0)&&(b%f==0))
                 .boxed()
-                .sorted(Collections.reverseOrder())
+//                .sorted(Collections.reverseOrder())
                 .findFirst()
                 .get();
 
