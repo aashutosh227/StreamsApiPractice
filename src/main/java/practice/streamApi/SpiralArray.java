@@ -1,6 +1,7 @@
 package practice.streamApi;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 //Print spiral version of an array {{1,2,3},{4,5,6},{7,8,9}} Output 1,2,3,6,9,8,7,4,5
@@ -15,19 +16,58 @@ public class SpiralArray {
         int c = sn.nextInt();
 
         int[][] arr = new int[r][c];
+        boolean[][] visited = new boolean[r][c];
 
         System.out.println("Enter elements: ");
 
-        for(int i=0;i<r;i++)
-            for(int j=0;j<c;j++)
-                arr[i][j]=sn.nextInt();
+        for(int i=0;i<r;i++) {
+            for (int j = 0; j < c; j++) {
+                arr[i][j] = sn.nextInt();
+                visited[i][j]=false;
+            }
+        }
 
-        int[] arr1= Arrays.stream(arr)
-                .flatMapToInt(e->Arrays.stream(e))
-                .toArray();
+        int[] crow = {0,1,0,-1};
+        int[] ccol = {1,0,-1,0};
 
-        System.out.println("Spiral Array: ");
-        for(int n: arr1)
-            System.out.print(" "+n);
+        int[][] rs = new int[r][c];
+
+        int ri=0,ci=0;
+        int k=0,l=0;
+
+        for(int i=0;i<r*c;i++){
+            if(!visited[ri][ci]) {
+                rs[ri][ci] = arr[ri][ci];
+                visited[ri][ci]=true;
+            }
+            else{
+                if(ri==ci){
+                    ri++;
+                    ci++;
+                    if(ri<r && ci<c)
+                        rs[ri][ci] = arr[ri][ci];
+                    visited[ri][ci]=true;
+                    k++;
+                    l++;
+                    ci+=crow[l];
+                    ri+=crow[k];
+                }
+            }
+
+            if(!(ri+crow[k]<r && ri+crow[k]>0)){
+                k++;
+                l++;
+            }
+
+            if(!(ci+crow[l]<c && ri+ccol[l]>0)){
+                k++;
+                l++;
+            }
+            ci+=crow[l];
+            ri+=crow[k];
+
+        }
+
+        Arrays.stream(rs).forEach(n->System.out.println(n));
     }
 }
