@@ -30,44 +30,61 @@ public class SpiralArray {
         int[] crow = {0,1,0,-1};
         int[] ccol = {1,0,-1,0};
 
-        int[][] rs = new int[r][c];
+        int[] rs = new int[r*c];
 
         int ri=0,ci=0;
         int k=0,l=0;
+        int j=0;
 
         for(int i=0;i<r*c;i++){
+//            System.out.println(ri+" "+ci);
             if(!visited[ri][ci]) {
-                rs[ri][ci] = arr[ri][ci];
+                rs[j++] = arr[ri][ci];
+                Arrays.stream(rs).forEach(n->System.out.print(n+" "));
+                System.out.println();
                 visited[ri][ci]=true;
             }
+            //line 44 - 63 -> for dropping one level down in spiral.
             else{
                 if(ri==ci){
                     ri++;
                     ci++;
-                    if(ri<r && ci<c)
-                        rs[ri][ci] = arr[ri][ci];
-                    visited[ri][ci]=true;
+                    if(ri<r && ci<c) {
+                        rs[j++] = arr[ri][ci];
+                        visited[ri][ci] = true;
+                    }
                     k++;
                     l++;
-                    ci+=crow[l];
+                    if(l==4 && k==4){
+                        k=0;
+                        l=0;
+                    }
+                    ci+=ccol[l];
                     ri+=crow[k];
                 }
             }
 
-            if(!(ri+crow[k]<r && ri+crow[k]>0)){
-                k++;
-                l++;
-            }
+//            if(!(ri+crow[k]<r && ri+crow[k]>0)){
+//                k++;
+//                l++;
+//            }
 
-            if(!(ci+crow[l]<c && ri+ccol[l]>0)){
-                k++;
-                l++;
+            //Line 70 -80 -> to handle edge turning
+            if(l<=3 && k<=3) {
+                if (!(ci + ccol[l] < c && ci + ccol[l] >= 0)
+                || !(ri+crow[k]<r && ri+crow[k]>=0)) {
+                    k++;
+                    l++;
+                }
             }
-            ci+=crow[l];
+            else{
+                l=0;
+                k=0;
+            }
+            ci+=ccol[l];
             ri+=crow[k];
-
         }
 
-        Arrays.stream(rs).forEach(n->System.out.println(n));
+        Arrays.stream(rs).forEach(n->System.out.print(n+" "));
     }
 }
